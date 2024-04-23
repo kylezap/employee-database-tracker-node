@@ -3,7 +3,7 @@
 
 
 //Imports
-
+const {viewDepartments, viewRoles, viewEmployees, addDepartment, addEmployee} = require('./query')
 const inquirer = require('inquirer');
 
 
@@ -15,6 +15,35 @@ const directionsPrompt = {
   choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee'],
 };
 
+const addDepartmentPrompt = {
+  type: 'input',
+  name: 'department',
+  message: 'What is the name of the department you would like to add?',
+}
+
+const addRolePrompt = {
+  type: 'input',
+  name: 'role',
+  message: 'What is the name of the role you would like to add?',
+}
+
+const addEmployeePrompt = [{
+  type: 'input',
+  name: 'first',
+  message: 'What is the first name of the employee you would like to add?'
+},
+{ type: 'input',
+name: 'last',
+message: 'What is their last name?'
+},
+{
+  type: 'list',
+  name: 'role',
+  message: 'What is their role?',
+  choices: 
+}
+]
+
 function main() {
   console.log('Welcome to Employee Tracker.');
   chooseAction();
@@ -23,56 +52,36 @@ function main() {
 function chooseAction() {
   inquirer.prompt(directionsPrompt).then((answers) => {
     if (answers.direction === 'view all departments') {
-      console.log('You find yourself in a forest');
-      console.log(
-        'There is a wolf in front of you; a friendly looking dwarf to the right and an impasse to the left.',
-      );
-      encounter1();
-    } else {
+      viewDepartments();
+      chooseAction();
+    } else if (answers.direction === 'view all roles') {
+      viewRoles();
+      chooseAction();
+    } else if (answers.direction === 'view all employees') {
+      viewEmployees();
+      chooseAction();
+    } else if (answers.direction === 'add a department') {
+      inquirer.prompt(addDepartmentPrompt).then((answer) => {
+        addDepartment(answer.department);
+        console.log('Success!');
+       })
+    } else if (answers.direction === 'add a role') {
+      inquirer.prompt(addRolePrompt).then((answer) => {
+        addRole(answer.role);
+        console.log('Success!');
+       })
+    } else if (answers.direction === 'add an employee') {
+      inquirer.prompt(addEmployeePrompt).then((answer) => {
+        addEmployee(answer.first, answer.last, answer.role);
+        console.log('Success!');
+       })
+    }
+    
+    else {
       console.log('Still working on this feature.');
       chooseAction();
     }
   });
 }
-
-function encounter1() {
-  inquirer.prompt(directionsPrompt).then((answers) => {
-    const { direction } = answers;
-    if (direction === 'Forward') {
-      console.log('You attempt to fight the wolf');
-      console.log(
-        'Theres a stick and some stones lying around you could use as a weapon',
-      );
-      encounter2b();
-    } else if (direction === 'Right') {
-      console.log('You befriend the dwarf');
-      console.log('He helps you kill the wolf. You can now move forward');
-      encounter2a();
-    } else {
-      console.log('You cannot go that way');
-      encounter1();
-    }
-  });
-}
-
-function encounter2a() {
-  inquirer.prompt(directionsPrompt).then((answers) => {
-    const { direction } = answers;
-    if (direction === 'Forward') {
-      let output = 'You find a painted wooden sign that says:';
-      output += ' \n';
-      output += ' ____  _____  ____  _____ \n';
-      output += '(_  _)(  _  )(  _ \\(  _  ) \n';
-      output += '  )(   )(_)(  )(_) ))(_)(  \n';
-      output += ' (__) (_____)(____/(_____) \n';
-      console.log(output);
-    } else {
-      console.log('You cannot go that way');
-      encounter2a();
-    }
-  });
-}
-
-
 
 main();

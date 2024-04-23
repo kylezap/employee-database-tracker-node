@@ -20,12 +20,39 @@ const pool = new Pool(
 
 pool.connect();
 
+
 // Query database using COUNT() and GROUP BY
-pool.query('SELECT * FROM departments', function (err, {rows}) {
-  console.log(rows);
-});
+const viewDepartments = () => {pool.query('SELECT * FROM departments', function (err, {rows}) {
+  console.table(rows);
+})
+}
 
+const viewRoles = () => {pool.query('SELECT * FROM roles', function (err, {rows}) {
+  console.table(rows);
+})
+}
 
+const viewEmployees = () => {pool.query('SELECT * FROM employees JOIN roles ON roles.id = role_id', function (err, {rows}) {
+  console.table(rows);
+})
+}
+
+const addDepartment = (input) => {pool.query('INSERT INTO departments (department_name) VALUES ($1)',[input], function (err, {rows}) {
+  console.table(rows);
+})
+}
+
+const addRole = (input) => {pool.query('INSERT INTO departments (department_name) VALUES ($1)',[input], function (err, {rows}) {
+  console.table(rows);
+})
+}
+
+const addEmployee = (first, last, role) => {pool.query('INSERT INTO employees (first_name, last_name, role_id) VALUES ($1, $2, $3)',[first, last, role], function (err, {rows}) {
+  console.table(rows);
+})
+}
+
+module.exports = {viewDepartments, viewRoles, viewEmployees, addDepartment, addEmployee};
 
 
 
